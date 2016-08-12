@@ -9,5 +9,11 @@ export default function render(node, options = {}) {
     const { children = [], ...rest } = node.props || {};
     const props = entries(rest).reduce((state, [key, value]) => `${state} ${key}="${value}"`, '');
 
-    return children.length ? `<${node.tag}${props}>${children.map(child => render(child, options)).join('')}</${node.tag}>` : `<${node.tag}${props}/>`;
+    if (node.tag) {
+        return children.length ? `<${node.tag}${props}>${children.map(child => render(child, options)).join('')}</${node.tag}>` : `<${node.tag}${props}/>`;
+    }
+
+    if (Array.isArray(node)) {
+        return node.map(child => render(child, options)).join('');
+    }
 }
